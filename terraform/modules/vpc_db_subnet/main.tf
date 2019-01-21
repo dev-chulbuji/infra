@@ -40,6 +40,7 @@ resource "aws_default_network_acl" "dev_default" {
   subnet_ids = [
     "${aws_subnet.public.*.id}",
     "${aws_subnet.private.*.id}",
+    "${aws_subnet.database.*.id}"
   ]
 
   tags = "${merge(var.tags, map("Name", format("%s-default", var.name)))}"
@@ -86,6 +87,27 @@ resource "aws_subnet" "private" {
   availability_zone = "${var.azs[count.index]}"
 
   tags = "${merge(var.tags, map("Name", format("%s-private-%s", var.name, var.azs[count.index])))}"
+}
+
+# private database subnet
+resource "aws_subnet" "database" {
+  count = "${length(var.database_subnets)}"
+
+  vpc_id            = "${aws_vpc.this.id}"
+  cidr_block        = "${var.database_subnets[count.index]}"
+  availability_zone = "${var.azs[count.index]}"
+
+  tags = "${merge(var.tags, map("Name", format("%s-db-%s", var.name, var.azs[count.index])))}"
+}
+
+resource "aws_db_subnet_group" "database" {
+  count = "${length(var.database_subnets) > 0 ? 1 : 0}"
+
+  name        = "${var.name}"
+  description = "Database subnet group for ${var.name}"
+  subnet_ids  = ["${aws_subnet.database.*.id}"]
+
+  tags = "${merge(var.tags, map("Name", format("%s", var.name)))}"
 }
 
 # EIP for NAT gateway
@@ -141,5 +163,12 @@ resource "aws_route_table_association" "private" {
   count = "${length(var.private_subnets)}"
 
   subnet_id      = "${aws_subnet.private.*.id[count.index]}"
+  route_table_id = "${aws_route_table.private.*.id[count.index]}"
+}
+
+resource "aws_route_table_association" "database" {
+  count = "${length(var.database_subnets)}"
+
+  subnet_id      = "${aws_subnet.database.*.id[count.index]}"
   route_table_id = "${aws_route_table.private.*.id[count.index]}"
 }
