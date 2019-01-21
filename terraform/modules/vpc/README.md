@@ -4,7 +4,6 @@
 |------|-------------|:----:|:-----:|:-----:|
 | azs | 사용할 availability zones 리스트 | list | - | yes |
 | cidr | VPC에 할당한 CIDR block | string | - | yes |
-| database\_subnets | Database Subnet IP 리스트 | list | - | yes |
 | name | 모듈에서 정의하는 모든 리소스 이름의 prefix | string | - | yes |
 | private\_subnets | Private Subnet IP 리스트 | list | - | yes |
 | public\_subnets | Public Subnet IP 리스트 | list | - | yes |
@@ -14,8 +13,6 @@
 
 | Name | Description |
 |------|-------------|
-| database\_subnet\_group\_id | Database Subnet Group ID |
-| database\_subnets\_ids | Database Subnet ID 리스트 |
 | default\_network\_acl\_id | VPC default network ACL ID |
 | default\_security\_group\_id | VPC default Security Group ID |
 | igw\_id | Interget Gateway ID |
