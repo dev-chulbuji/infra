@@ -33,7 +33,12 @@ variable "keypair_name" {
   type        = "string"
 }
 
-variable "ingress_cidr_blocks" {
+variable "ingress_http_cidr_blocks" {
+  description = "http 접속을 허용할 CIDR block 리스트"
+  type        = "list"
+}
+
+variable "ingress_ssh_cidr_blocks" {
   description = "SSH 접속을 허용할 CIDR block 리스트"
   type        = "list"
 }
