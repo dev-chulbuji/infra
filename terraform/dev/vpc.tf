@@ -1,23 +1,78 @@
-# module키워드를 사용해서 vpc module을 정의한다.
 module "vpc" {
   source = "../modules/vpc"
 
-  # VPC이름을 넣어준다. 이 값은 VPC module이 생성하는 모든 리소스 이름의 prefix가 된다.
   name = "dev"
-  # VPC의 CIDR block을 정의한다.
   cidr = "172.17.0.0/16"
 
-  # VPC가 사용할 AZ를 정의한다.
   azs              = ["ap-northeast-1a", "ap-northeast-1c"]
-  # VPC의 Public Subnet CIDR block을 정의한다.
   public_subnets   = ["172.17.1.0/24", "172.17.2.0/24"]
-  # VPC의 Private Subnet CIDR block을 정의한다.
   private_subnets  = ["172.17.101.0/24", "172.17.102.0/24"]
-  # VPC의 Private DB Subnet CIDR block을 정의한다. (RDS를 사용하지 않으면 이 라인은 필요없다.)
-  database_subnets = ["172.17.201.0/24", "172.17.202.0/24"]
+  database_subnets  = ["172.17.201.0/24", "172.17.202.0/24"]
+  ingress_cidr_blocks = ["${var.office_cidr_blocks}"]
+  
+  database_ingress_ips = "${module.ec2.private_ip}"
 
-  # VPC module이 생성하는 모든 리소스에 기본으로 입력될 Tag를 정의한다.
   tags = {
     "TerraformManaged" = "true"
   }
 }
+
+module "bastion" {
+  source = "../modules/bastion"
+  name = "bastion"
+
+  instance_type = "t2.nano"
+  keypair_name = "${var.key_pair}"
+  ami = "${data.aws_ami.amazon_linux_nat.id}"
+  
+  vpc_id = "${module.vpc.vpc_id}"
+  availability_zone = "${module.vpc.azs[0]}"
+  subnet_id = "${module.vpc.public_subnets_ids[0]}"
+
+  ingress_cidr_blocks = "${var.office_cidr_blocks}"
+
+  tags = {
+    "TerraformManaged" = "true"
+  }
+}
+
+module "ec2" {
+  source = "../modules/ec2"
+  name = "server"
+
+  instance_type = "t2.micro"
+  keypair_name = "${var.key_pair}"
+  ami = "${data.aws_ami.ubuntu-18_04.id}"
+
+  vpc_id = "${module.vpc.vpc_id}"
+  availability_zone = "${module.vpc.azs[0]}"
+  subnet_id = "${module.vpc.public_subnets_ids[0]}"
+  
+  ingress_sg_from_bastion = "${module.bastion.ssh_from_bastion_sg_id}"
+  ingress_http_cidr_blocks = [ "0.0.0.0/0" ]
+
+  tags = {
+    "TerraformManaged" = "true"
+  }
+}
+
+module "database" {
+  source = "../modules/rds"
+
+  name = "chulbujidb"
+  identifier = "chulbuji-db-instance"
+
+  engine = "postgres"
+  engine_version = "10.4"
+  username = "chulbuji"
+  password = "chulbuji"
+
+  db_instance_type = "db.t2.micro"
+
+  ingress_sg_from_bastion = "${module.bastion.ssh_from_bastion_sg_id}"
+
+  tags = {
+    "TerraformManaged" = "true"
+  }
+}
+
