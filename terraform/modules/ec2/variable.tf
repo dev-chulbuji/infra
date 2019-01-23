@@ -38,7 +38,7 @@ variable "ingress_http_cidr_blocks" {
   type        = "list"
 }
 
-variable "ingress_ssh_cidr_blocks" {
+variable "ingress_sg_from_bastion" {
   description = "SSH 접속을 허용할 CIDR block 리스트"
   type        = "list"
 }

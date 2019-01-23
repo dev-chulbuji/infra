@@ -18,13 +18,6 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = "${var.ingress_http_cidr_blocks}"
   }
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = "${var.ingress_ssh_cidr_blocks}"
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -42,7 +35,7 @@ resource "aws_instance" "ec2" {
   availability_zone      = "${var.availability_zone}"
   subnet_id              = "${var.subnet_id}"
   key_name               = "${var.keypair_name}"
-  vpc_security_group_ids = ["${aws_security_group.ec2.id}"]
+  vpc_security_group_ids = ["${aws_security_group.ec2.id}", "${var.ingress_sg_from_bastion}"]
   associate_public_ip_address = true
 
   tags = "${merge(var.tags, map("Name", format("ec2-%s", var.name)))}"

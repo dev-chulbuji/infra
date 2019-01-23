@@ -41,6 +41,10 @@ output "public_subnets_ids" {
   value       = ["${aws_subnet.public.*.id}"]
 }
 
+output "db_subnet_group_name" {
+  value       = "${aws_db_subnet_group.database.*.name}"
+}
+
 # route tables
 output "public_route_table_ids" {
   description = "Public Route Table ID 리스트"
