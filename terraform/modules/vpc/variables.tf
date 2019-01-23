@@ -18,6 +18,11 @@ variable "private_subnets" {
   type        = "list"
 }
 
+variable "database_subnets" {
+  description = "database Subnet IP 리스트"
+  type        = "list"
+}
+
 variable "azs" {
   description = "사용할 availability zones 리스트"
   type        = "list"

@@ -70,25 +70,14 @@ resource "aws_network_acl" "dev_private_nacl" {
   tags = "${merge(var.tags, map("Name", format("%s-private-nacl", var.name)))}"
 }
 
-# default security group
-resource "aws_default_security_group" "dev_default" {
+resource "aws_network_acl" "dev_database_nacl" {
   vpc_id = "${aws_vpc.this.id}"
 
-  ingress {
-    protocol  = -1
-    self      = true
-    from_port = 0
-    to_port   = 0
-  }
+  subnet_ids = [
+    "${aws_subnet.database.*.id}",
+  ]
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = "${merge(var.tags, map("Name", format("%s-default", var.name)))}"
+  tags = "${merge(var.tags, map("Name", format("%s-database-nacl", var.name)))}"
 }
 
 # public subnet
@@ -112,6 +101,28 @@ resource "aws_subnet" "private" {
 
   tags = "${merge(var.tags, map("Name", format("%s-private-%s", var.name, var.azs[count.index])))}"
 }
+
+# private database subnet
+resource "aws_subnet" "database" {
+  count = "${length(var.database_subnets)}"
+
+  vpc_id            = "${aws_vpc.this.id}"
+  cidr_block        = "${var.database_subnets[count.index]}"
+  availability_zone = "${var.azs[count.index]}"
+
+  tags = "${merge(var.tags, map("Name", format("%s-db-%s", var.name, var.azs[count.index])))}"
+}
+
+resource "aws_db_subnet_group" "database" {
+  count = "${length(var.database_subnets) > 0 ? 1 : 0}"
+
+  name        = "${var.name}"
+  description = "Database subnet group for ${var.name}"
+  subnet_ids  = ["${aws_subnet.database.*.id}"]
+
+  tags = "${merge(var.tags, map("Name", format("%s", var.name)))}"
+}
+
 
 # EIP for NAT gateway
 resource "aws_eip" "nat" {
@@ -166,5 +177,12 @@ resource "aws_route_table_association" "private" {
   count = "${length(var.private_subnets)}"
 
   subnet_id      = "${aws_subnet.private.*.id[count.index]}"
+  route_table_id = "${aws_route_table.private.*.id[count.index]}"
+}
+
+resource "aws_route_table_association" "database" {
+  count = "${length(var.database_subnets)}"
+
+  subnet_id      = "${aws_subnet.database.*.id[count.index]}"
   route_table_id = "${aws_route_table.private.*.id[count.index]}"
 }
