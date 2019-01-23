@@ -9,6 +9,11 @@ output "vpc_cidr_block" {
   value       = "${aws_vpc.this.cidr_block}"
 }
 
+output "azs" {
+  description = "사용할 availability zones 리스트"
+  value       = "${var.azs}"
+}
+
 output "default_security_group_id" {
   description = "VPC default Security Group ID"
   value       = "${aws_vpc.this.default_security_group_id}"
