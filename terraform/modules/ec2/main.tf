@@ -43,6 +43,7 @@ resource "aws_instance" "ec2" {
   subnet_id              = "${var.subnet_id}"
   key_name               = "${var.keypair_name}"
   vpc_security_group_ids = ["${aws_security_group.ec2.id}"]
+  associate_public_ip_address = true
 
   tags = "${merge(var.tags, map("Name", format("ec2-%s", var.name)))}"
 }
