@@ -37,6 +37,21 @@ resource "aws_security_group" "ssh_from_bastion" {
   tags = "${merge(var.tags, map("Name", format("%s-ssh-from-bastion", var.name)))}"
 }
 
+resource "aws_security_group" "database_from_bastion" {
+  name        = "database_from_bastion"
+  description = "Allow DB connect from bastion instance"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.bastion.id}"]
+  }
+
+  tags = "${merge(var.tags, map("Name", format("%s-ssh-from-bastion", var.name)))}"
+}
+
 # bastion EC2
 resource "aws_instance" "bastion" {
   ami                    = "${var.ami}"

@@ -13,6 +13,11 @@ output "ssh_from_bastion_sg_id" {
   value       = ["${aws_security_group.ssh_from_bastion.id}"]
 }
 
+output "database_from_bastion_sg_id" {
+  description = "Bastion을 통한 DATABASE 연결을 허용하는 SG ID"
+  value       = ["${aws_security_group.database_from_bastion.id}"]
+}
+
 output "eip_id" {
   description = "Bastion에 할당된 EIP ID"
   value       = ["${aws_eip.bastion.id}"]
