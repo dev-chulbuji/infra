@@ -23,11 +23,6 @@ variable "database_subnets" {
   type        = "list"
 }
 
-variable "database_ingress_ips" {
-  description = "database(postgres)가 ingress로 받을 Ip"
-  type        = "string"
-}
-
 variable "azs" {
   description = "사용할 availability zones 리스트"
   type        = "list"
