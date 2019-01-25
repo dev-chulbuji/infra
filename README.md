@@ -1,3 +1,7 @@
 # chulbuji infrastructure
 - terraform
-	- [vpc](/terraform/modules/vpc/README.md)
+	- [vpc with nat gatway](/terraform/modules/vpc/README.md)
+	- vpc with nat instance
+	- [bastion](/terraform/modules/bastion/README.md)
+	- [rds](/terraform/modules/rds/README.md)
+	- [key pair](/terraform/modules/key_pair/README.md)
