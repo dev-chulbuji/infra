@@ -110,7 +110,10 @@ resource "aws_subnet" "public" {
   cidr_block        = "${var.public_subnets[count.index]}"
   availability_zone = "${var.azs[count.index]}"
 
-  tags = "${merge(var.tags, map("Name", format("%s-public-%s", var.name, var.azs[count.index])))}"
+  tags = "${merge(
+            var.tags, 
+            map("Name", format("%s-public-%s", var.name, var.azs[count.index])),
+            map("Tier", "public"))}"
 }
 
 # private subnet
@@ -121,7 +124,10 @@ resource "aws_subnet" "private" {
   cidr_block        = "${var.private_subnets[count.index]}"
   availability_zone = "${var.azs[count.index]}"
 
-  tags = "${merge(var.tags, map("Name", format("%s-private-%s", var.name, var.azs[count.index])))}"
+  tags = "${merge(
+            var.tags, 
+            map("Name", format("%s-private-%s", var.name, var.azs[count.index])),
+            map("Tier", "private"))}"
 }
 
 # private database subnet
@@ -132,7 +138,10 @@ resource "aws_subnet" "database" {
   cidr_block        = "${var.database_subnets[count.index]}"
   availability_zone = "${var.azs[count.index]}"
 
-  tags = "${merge(var.tags, map("Name", format("%s-db-%s", var.name, var.azs[count.index])))}"
+  tags = "${merge(
+            var.tags, 
+            map("Name", format("%s-database-%s", var.name, var.azs[count.index])),
+            map("Tier", "database"))}"
 }
 
 resource "aws_db_subnet_group" "database" {
