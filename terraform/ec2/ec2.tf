@@ -13,6 +13,9 @@ module "ec2" {
   ingress_http_cidr_blocks = [
     "0.0.0.0/0"]
 
+  allow_ssh_ip = [
+    "0.0.0.0/0"]
+
   tags = {
     "TerraformManaged" = "true"
   }

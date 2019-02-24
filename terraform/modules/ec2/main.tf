@@ -9,6 +9,13 @@ resource "aws_security_group" "ec2" {
   vpc_id = "${data.aws_vpc.selected.id}"
 
   ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = "${var.allow_ssh_ip}"
+  }
+
+  ingress {
     from_port = 80
     to_port = 80
     protocol = "tcp"

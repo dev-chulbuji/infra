@@ -18,6 +18,11 @@ variable "subnet_type" {
   default = "public"
 }
 
+variable "allow_ssh_ip" {
+  description = "ssh 접속을 허용 할 ip list"
+  type = "list"
+}
+
 variable "ami" {
   description = "ec2 생성에 사용할 AMI"
   type = "string"
