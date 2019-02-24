@@ -4,7 +4,7 @@ provider "aws" {
 
 # SG for SSH Connect to EC2
 resource "aws_security_group" "ec2" {
-  name = "sg-${var.name}"
+  name = "${var.name}"
   description = "sg for ec2"
   vpc_id = "${data.aws_vpc.selected.id}"
 
