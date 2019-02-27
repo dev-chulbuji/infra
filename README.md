@@ -7,3 +7,6 @@
   - [elasticsearch](/terraform/modules/elasticsearch)
   - [rds](/terraform/modules/rds)
   - [key pair](/terraform/modules/key_pair)
+  - [elasticsearch](/terraform/modules/elasticsearch)
+  - [s3](/terraform/modules/s3)
+
