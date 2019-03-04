@@ -4,7 +4,7 @@ data "aws_vpc" "selected" {
   }
 }
 
-data "aws_subnet_ids" "selected" {
+data "aws_subnet" "selected" {
   vpc_id = "${data.aws_vpc.selected.id}"
 
   tags {

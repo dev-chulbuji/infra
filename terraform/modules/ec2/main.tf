@@ -46,7 +46,7 @@ resource "aws_instance" "ec2" {
   instance_type = "${var.instance_type}"
 
   availability_zone = "${var.availability_zone}"
-  subnet_id = "${data.aws_subnet_ids.selected.ids[0]}"
+  subnet_id = "${data.aws_subent.selected.id}"
 
   key_name = "${var.keypair_name}"
   vpc_security_group_ids = [
