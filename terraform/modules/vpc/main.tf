@@ -113,8 +113,9 @@ resource "aws_subnet" "public" {
   tags = "${merge(
               var.tags, 
               map("Name", format("%s-public-%s", var.name, var.azs[count.index])),
-              map("Tier", format("public-%s", element(split("-", var.azs[count.index]), 2))))}"
+              map("Tier", format("public-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
 }
+
 
 # private subnet
 resource "aws_subnet" "private" {
@@ -127,7 +128,7 @@ resource "aws_subnet" "private" {
   tags = "${merge(
             var.tags, 
             map("Name", format("%s-private-%s", var.name, var.azs[count.index])),
-            map("Tier", format("private-%s", element(split("-", var.azs[count.index]), 2))))}"
+            map("Tier", format("private-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
 }
 
 # private database subnet
@@ -141,7 +142,7 @@ resource "aws_subnet" "database" {
   tags = "${merge(
             var.tags, 
             map("Name", format("%s-database-%s", var.name, var.azs[count.index])),
-            map("Tier", format("database-%s", element(split("-", var.azs[count.index]), 2))))}"
+            map("Tier", format("database-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
 }
 
 resource "aws_db_subnet_group" "database" {
