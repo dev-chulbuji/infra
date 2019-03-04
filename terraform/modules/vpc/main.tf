@@ -111,9 +111,9 @@ resource "aws_subnet" "public" {
   availability_zone = "${var.azs[count.index]}"
 
   tags = "${merge(
-            var.tags, 
-            map("Name", format("%s-public-%s", var.name, var.azs[count.index])),
-            map("Tier", "public"))}"
+              var.tags, 
+              map("Name", format("%s-public-%s", var.name, var.azs[count.index])),
+              map("Tier", format("public-%s", element(split("-", var.azs[count.index]), 2))))}"
 }
 
 # private subnet
@@ -127,7 +127,7 @@ resource "aws_subnet" "private" {
   tags = "${merge(
             var.tags, 
             map("Name", format("%s-private-%s", var.name, var.azs[count.index])),
-            map("Tier", "private"))}"
+            map("Tier", format("private-%s", element(split("-", var.azs[count.index]), 2))))}"
 }
 
 # private database subnet
@@ -141,7 +141,7 @@ resource "aws_subnet" "database" {
   tags = "${merge(
             var.tags, 
             map("Name", format("%s-database-%s", var.name, var.azs[count.index])),
-            map("Tier", "database"))}"
+            map("Tier", format("database-%s", element(split("-", var.azs[count.index]), 2))))}"
 }
 
 resource "aws_db_subnet_group" "database" {
