@@ -1,3 +1,12 @@
+terraform {
+    backend "s3" {
+        bucket  = "mmt-yata-infra"
+        key     = "eks-cluster/terraform.tfstate"
+        region  = "ap-northeast-2"
+        encrypt = true
+    }
+}
+
 resource "aws_s3_bucket" "s3" {
   bucket = "${var.bucket_name}"
   region = "${var.region}"
