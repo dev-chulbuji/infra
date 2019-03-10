@@ -1,16 +1,18 @@
 terraform {
   backend "s3" {
-    bucket  = "dj-terraform-backend"
-    key     = "bastion/terraform.tfstate"
-    region  = "ap-northeast-2"
+    bucket  = "dj-terraform-backend-dev"
+    key     = "ec2/terraform.tfstate"
+    region  = "ap-northeast-1"
     encrypt = true
-    dynamodb_table = "dj-TerraformStateLock"
+    dynamodb_table = "dj-TerraformStateLock-dev"
     acl = "bucket-owner-full-control"
   }
 }
 
 locals {
-  region = "ap-northeast-2"
+  tier = "${terraform.workspace}"
+  region = "${terraform.workspace == "dev" ? "ap-northeast-1" : "ap-northeast-2"}"
+  key = "${terraform.workspace == "dev" ? "aws_key_pair_tokyo" : "aws_key_pair_seoul"}"
 }
 
 provider "aws" {
@@ -20,7 +22,7 @@ provider "aws" {
 
 module "ec2" {
   source = "../modules/ec2"
-  name = "server"
+  name = "server-${local.tier}"
   region = "${local.region}"
 
   vpc_name = "chulbuji"
@@ -28,14 +30,14 @@ module "ec2" {
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
   instance_type = "t2.micro"
-  keypair_name = "aws_key_pair_seoul"
+  keypair_name = "${local.key}"
   ami = "${data.aws_ami.ubuntu-18_04.id}"
 
   ingress_http_cidr_blocks = ["0.0.0.0/0"]
   allow_ssh_ip = ["0.0.0.0/0"]
 
   tags = {
-    "Name" = "bastion"
+    "Name" = "server-${local.tier}"
     "TerraformManaged" = "true"
   }
 }

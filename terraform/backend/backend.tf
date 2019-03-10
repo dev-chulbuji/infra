@@ -1,14 +1,15 @@
 locals {
-  region = "ap-northeast-2"
+  region = "${terraform.workspace == "dev" ? "ap-northeast-1" : "ap-northeast-2"}"
+  tier = "${terraform.workspace}"
 }
 
 provider "aws" {
-  version = "~> 2.0"
+  version = "~> 2.1"
   region = "${local.region}"
 }
 
 resource "aws_dynamodb_table" "dj-terraform_state_lock" {
-  name = "dj-TerraformStateLock"
+  name = "dj-TerraformStateLock-${local.tier}"
   billing_mode   = "PROVISIONED"
   read_capacity = 1
   write_capacity = 1
@@ -20,24 +21,24 @@ resource "aws_dynamodb_table" "dj-terraform_state_lock" {
   }
   
   tags = {
-    Name = "dj-terraform-state-lock-table"
+    Name = "dj-terraform-state-lock-table-${local.tier}"
     "TerraformManaged" = "true"
   }
 }
 
 resource "aws_s3_bucket" "dj-terraform-logs" {
-  bucket = "dj-terraform-log"
+  bucket = "dj-terraform-log-${local.tier}"
   acl    = "log-delivery-write"
   region = "${local.region}"
 
   tags = {
-    Name = "dj-terraform-state-log"
+    Name = "dj-terraform-state-log-${local.tier}"
     "TerraformManaged" = "true"
   }
 }
 
 resource "aws_s3_bucket" "dj-terraform-stat" {
-  bucket = "dj-terraform-backend"
+  bucket = "dj-terraform-backend-${local.tier}"
   acl    = "private"
   region = "${local.region}"
   versioning {
@@ -45,7 +46,7 @@ resource "aws_s3_bucket" "dj-terraform-stat" {
   }
 
   tags = {
-    Name = "dj-terraform-state"
+    Name = "dj-terraform-state-${local.tier}"
     TerraformManaged = "true"
   }
 

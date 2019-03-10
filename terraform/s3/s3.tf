@@ -1,5 +1,5 @@
 locals {
-  region = "ap-northeast-1"
+  region = "${terraform.workspace == "dev" ? "ap-northeast-1" : "ap-northeast-2"}"
 }
 
 provider "aws" {
@@ -9,7 +9,7 @@ provider "aws" {
 
 module "s3" {
   source = "../modules/s3"
-  bucket_name = "dj-s3"
+  bucket = "dj-s3${terraform.workspace == "dev" ? "-dev" : "-${terraform.workspace}"}"
   region = "ap-northeast-1"
   acl = "public-read"
   versioning_enabled = "true"
