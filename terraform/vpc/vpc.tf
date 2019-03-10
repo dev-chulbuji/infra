@@ -1,16 +1,17 @@
-terraform {
-  backend "s3" {
-    bucket  = "dj-terraform-backend"
-    key     = "vpc/terraform.tfstate"
-    region  = "ap-northeast-2"
-    encrypt = true
-    dynamodb_table = "dj-TerraformStateLock"
-    acl = "bucket-owner-full-control"
-  }
+locals {
+  tier = "${terraform.workspace}"
+  region = "${terraform.workspace == "dev" ? "ap-northeast-1" : "ap-northeast-2"}"
 }
 
-locals {
-  region = "ap-northeast-2"
+terraform {
+  backend "s3" {
+    bucket  = "dj-terraform-backend-dev"
+    key     = "vpc/terraform.tfstate"
+    region  = "ap-northeast-1"
+    encrypt = true
+    dynamodb_table = "dj-TerraformStateLock-dev"
+    acl = "bucket-owner-full-control"
+  }
 }
 
 provider "aws" {
