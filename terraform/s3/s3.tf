@@ -9,7 +9,7 @@ provider "aws" {
 
 module "s3" {
   source = "../modules/s3"
-  bucket_name = "dj-s3-1"
+  bucket_name = "dj-s3"
   region = "ap-northeast-1"
   acl = "public-read"
   versioning_enabled = "true"
