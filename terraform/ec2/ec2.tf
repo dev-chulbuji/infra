@@ -21,7 +21,7 @@ module "ec2" {
   name = "server"
   region = "${local.region}"
 
-  vpc_name = "chulbuji"
+  vpc_name = "bastion"
   subnet_type = "public"
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
