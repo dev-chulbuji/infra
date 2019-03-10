@@ -8,7 +8,7 @@ provider "aws" {
 }
 
 resource "aws_dynamodb_table" "dj-terraform_state_lock" {
-  name = "TerraformStateLock"
+  name = "dj-TerraformStateLock"
   billing_mode   = "PROVISIONED"
   read_capacity = 1
   write_capacity = 1

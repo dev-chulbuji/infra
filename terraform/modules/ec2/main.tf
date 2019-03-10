@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "${var.region}"
-}
-
 # SG for SSH Connect to EC2
 resource "aws_security_group" "ec2" {
   name = "${var.name}"
