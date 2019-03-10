@@ -13,9 +13,3 @@ data "aws_ami" "ubuntu-18_04" {
 
 
 data "aws_availability_zones" "available" {}
-
-data "aws_vpc" "selected" {
-  tags = {
-    name = "chulbuji"
-  }
-}

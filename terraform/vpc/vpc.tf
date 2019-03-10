@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "dj-terraform-backend"
-    key     = "ec2/terraform.tfstate"
+    key     = "vpc/terraform.tfstate"
     region  = "ap-northeast-2"
     encrypt = true
     dynamodb_table = "dj-TerraformStateLock"
@@ -37,7 +37,6 @@ module "vpc" {
   ingress_cidr_blocks = ["${data.external.myip.ip}"]
   
   tags = {
-    "name" = "chulbuji"
     "TerraformManaged" = "true"
   }
 }

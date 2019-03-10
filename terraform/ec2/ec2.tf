@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "dj-terraform-backend"
-    key     = "ec2/terraform.tfstate"
+    key     = "bastion/terraform.tfstate"
     region  = "ap-northeast-2"
     encrypt = true
     dynamodb_table = "dj-TerraformStateLock"
@@ -14,7 +14,7 @@ locals {
 }
 
 provider "aws" {
-  version = "~> 2.0"
+  version = "~> 2.1"
   region = "${local.region}"
 }
 
@@ -23,7 +23,7 @@ module "ec2" {
   name = "server"
   region = "${local.region}"
 
-  vpc_name = "${data.aws_vpc.selected.name}"
+  vpc_name = "chulbuji"
   subnet_type = "public"
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
