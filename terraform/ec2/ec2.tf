@@ -4,6 +4,8 @@ terraform {
     key     = "ec2/terraform.tfstate"
     region  = "ap-northeast-2"
     encrypt = true
+    dynamodb_table = "dj-TerraformStateLock"
+    acl = "bucket-owner-full-control"
   }
 }
 
@@ -21,7 +23,7 @@ module "ec2" {
   name = "server"
   region = "${local.region}"
 
-  vpc_name = "bastion"
+  vpc_name = "${data.aws_vpc.selected.name}"
   subnet_type = "public"
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
