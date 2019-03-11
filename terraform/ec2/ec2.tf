@@ -23,7 +23,7 @@ provider "aws" {
 
 module "ec2" {
   source = "../modules/ec2"
-  name = "server-${local.tier}"
+  name = "chulbuji-server-${local.tier}"
   region = "${local.region}"
 
   vpc_name = "chulbuji"
@@ -38,7 +38,7 @@ module "ec2" {
   allow_ssh_ip = ["0.0.0.0/0"]
 
   tags = {
-    "Name" = "server-${local.tier}"
+    "Name" = "chulbuji-server-${local.tier}"
     "TerraformManaged" = "true"
   }
 }
