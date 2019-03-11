@@ -6,7 +6,7 @@ projects:
   workspace: prod
   terraform_version: v0.11.11
   autoplan:
-    when_modified: ["*/*.tf*", "../modules/ec2/**.tf"]
+    when_modified: ["*.tf*", "../modules/ec2/**.tf"]
     enabled: true
   apply_requirements: [mergeable, approved]
   workflow: production
