@@ -38,6 +38,7 @@ module "vpc" {
   ingress_cidr_blocks = ["${data.external.myip.ip}"]
   
   tags = {
-    "TerraformManaged" = "true"
+    "TerraformManaged" = "true",
+    "kubernetes.io/cluster/chulbuji-eks-dev" = "shared"
   }
 }

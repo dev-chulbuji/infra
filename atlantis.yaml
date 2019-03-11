@@ -1,6 +1,15 @@
 version: 2
 automerge: true # Automatically merge pull request when all plans are applied
 projects:
+- name: vpc
+  dir: terraform/vpc
+  workspace: dev
+  terraform_version: v0.11.11
+  autoplan:
+    when_modified: ["*.tf", "../modules/vpc/**.tf"]
+    enabled: true
+  apply_requirements: [mergeable, approved]
+  workflow: dev
 - name: ec2
   dir: terraform/ec2
   workspace: prod
@@ -12,6 +21,11 @@ projects:
   workflow: production
 workflows:
   production:
+    plan:
+      steps:
+      - init
+      - plan
+  dev:
     plan:
       steps:
       - init
