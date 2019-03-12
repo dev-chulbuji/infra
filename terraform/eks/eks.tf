@@ -24,7 +24,7 @@ provider "aws" {
 }
 
 module "eks" {
-  source = "..\/modules\/eks"
+  source = "../modules/eks"
 
   cluster_name = "chulbuji-eks"
   kubernetes_version = "1.11"
