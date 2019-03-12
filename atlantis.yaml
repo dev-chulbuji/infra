@@ -39,5 +39,5 @@ workflows:
     plan:
       steps:
       - run: terraform init -input=false -no-color
-      - run: terraform workspace select -no-color $WORKSPAE
+      - run: terraform workspace select -no-color $WORKSPACE
       - run: terraform plan -input=false -refresh -no-color -out $PLANFILE
