@@ -3,19 +3,17 @@ variable "name" {
   type = "string"
 }
 
-variable "vpc_name" {
-  type = "string"
-  default = "chulbuji"
+variable "vpc_id" {
+  description = "vpc id"
+}
+
+variable "subnet_id" {
+  description = "subnet id"
 }
 
 variable "region" {
   type = "string"
   default = "ap-northeast-1"
-}
-
-variable "subnet_type" {
-  type = "string"
-  default = "public"
 }
 
 variable "allow_ssh_ip" {

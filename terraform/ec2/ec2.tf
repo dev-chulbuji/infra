@@ -23,11 +23,12 @@ provider "aws" {
 
 module "ec2" {
   source = "../modules/ec2"
-  name = "chulbuji-server-${local.tier}"
+  name = "server-${local.tier}"
   region = "${local.region}"
 
-  vpc_name = "chulbuji"
-  subnet_type = "public"
+  vpc_id = "${data.terraform_remote_state.vpc.vpc_id}"
+  subnet_id = "${data.terraform_remote_state.vpc.public_subnets_ids[0]}"
+
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
   instance_type = "t2.micro"
@@ -38,7 +39,6 @@ module "ec2" {
   allow_ssh_ip = ["0.0.0.0/0"]
 
   tags = {
-    "Name" = "chulbuji-server-${local.tier}"
     "TerraformManaged" = "true"
   }
 }
