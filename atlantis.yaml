@@ -28,6 +28,7 @@ projects:
     enabled: true
   apply_requirements: [mergeable]
   workflow: production
+
 workflows:
   production:
     plan:
@@ -37,5 +38,6 @@ workflows:
   dev:
     plan:
       steps:
-      - init
-      - plan
+      - run: terraform init -input=false -no-color
+      - run: terraform workspace select -no-color $WORKSPAE
+      - run: terraform plan -input=false -refresh -no-color -out $PLANFILE
