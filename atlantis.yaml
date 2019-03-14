@@ -15,7 +15,6 @@ workflows:
   dev:
     plan:
       steps:
-      - run: terraform workspace select dev
       - init:
           extra_args: [-backend-config=dev.tfvars]
       - plan
