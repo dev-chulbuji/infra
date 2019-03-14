@@ -15,6 +15,5 @@ workflows:
   dev:
     plan:
       steps:
-      - run: terraform workspace select dev
       - run: terraform init -reconfigure -backend-config=dev.tfbackend
       - plan
