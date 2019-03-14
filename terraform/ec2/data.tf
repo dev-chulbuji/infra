@@ -13,7 +13,7 @@ data "terraform_remote_state" "vpc" {
   backend = "s3"
   workspace = "${terraform.workspace}"
   config {
-    bucket  = "dj-terraform-backend-dev"
+    bucket  = "${local.backend}"
     key     = "vpc/terraform.tfstate"
     region  = "${local.region}"
     encrypt = true

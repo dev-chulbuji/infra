@@ -1,25 +1,17 @@
 version: 2
 automerge: true # Automatically merge pull request when all plans are applied
 projects:
-- name: eks
-  dir: terraform/eks
+- name: ec2-dev
+  dir: terraform/ec2
   workspace: dev
   terraform_version: v0.11.11
   autoplan:
-    when_modified: ["*.tf", "../modules/eks/**.tf"]
+    when_modified: ["*.tf", "../modules/ec2/**.tf"]
     enabled: true
   apply_requirements: [mergeable]
   workflow: dev
-- name: vpc
-  dir: terraform/vpc
-  workspace: dev
-  terraform_version: v0.11.11
-  autoplan:
-    when_modified: ["*.tf", "../modules/vpc/**.tf"]
-    enabled: true
-  apply_requirements: [mergeable]
-  workflow: dev
-- name: ec2
+  
+- name: ec2-prod
   dir: terraform/ec2
   workspace: prod
   terraform_version: v0.11.11
@@ -27,17 +19,18 @@ projects:
     when_modified: ["*.tf", "../modules/ec2/**.tf"]
     enabled: true
   apply_requirements: [mergeable]
-  workflow: production
+  workflow: prod
 
 workflows:
-  production:
+  prod:
     plan:
       steps:
-      - init
+      - run: terraform workspace select prod
+      - run: terraform init -reconfigure -backend-config=prod.tfbackend
       - plan
   dev:
     plan:
       steps:
-      - run: terraform init -input=false -no-color
-      - run: terraform workspace select -no-color $WORKSPACE
-      - run: terraform plan -input=false -refresh -no-color -out $PLANFILE
+      - run: terraform workspace select dev
+      - run: terraform init -reconfigure -backend-config=dev.tfbackend
+      - plan

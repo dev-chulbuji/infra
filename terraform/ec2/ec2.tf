@@ -1,12 +1,18 @@
+//terraform {
+//  required_version = ">= 0.11.11"
+//  backend "s3" {
+//    bucket  = "dj-terraform-backend-dev"
+//    key     = "ec2/terraform.tfstate"
+//    region  = "ap-northeast-1"
+//    encrypt = true
+//    dynamodb_table = "dj-TerraformStateLock-dev"
+//    acl = "bucket-owner-full-control"
+//  }
+//}
+
 terraform {
   required_version = ">= 0.11.11"
   backend "s3" {
-    bucket  = "dj-terraform-backend-dev"
-    key     = "ec2/terraform.tfstate"
-    region  = "ap-northeast-1"
-    encrypt = true
-    dynamodb_table = "dj-TerraformStateLock-dev"
-    acl = "bucket-owner-full-control"
   }
 }
 
@@ -14,6 +20,7 @@ locals {
   tier = "${terraform.workspace}"
   region = "${terraform.workspace == "dev" ? "ap-northeast-1" : "ap-northeast-2"}"
   key = "${terraform.workspace == "dev" ? "aws_key_pair_tokyo" : "aws_key_pair_seoul"}"
+  backend = "${terraform.workspace == "dev" ? "mmt-infra-backend": "dj-terraform-backend-dev"}" 
 }
 
 provider "aws" {

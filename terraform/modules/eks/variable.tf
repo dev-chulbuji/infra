@@ -58,13 +58,6 @@ variable "worker_autoscale_desired" {
   default = "5"
 }
 
-
-
-
-
-
-
-
 variable "map_roles" {
   description = "Additional IAM roles to add to the aws-auth configmap."
   type        = "list"
