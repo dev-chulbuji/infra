@@ -16,5 +16,5 @@ workflows:
     plan:
       steps:
       - init:
-        extra_args: [-backend-config=dev.tfbackend]
+          extra_args: [-backend-config=dev.tfbackend]
       - plan
