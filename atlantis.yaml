@@ -15,5 +15,6 @@ workflows:
   dev:
     plan:
       steps:
-      - run: terraform init -reconfigure -backend-config=dev.tfbackend
+      - init:
+        extra_args: [-backend-config=dev.tfbackend]
       - plan
