@@ -47,13 +47,13 @@ locals {
 cluster_name = ${element(concat(aws_eks_cluster.cluster.*.name, [""]), 0)}
 
 # kube config
-mkdir -p ~/.kube && cp result=${aws_eks_cluster.cluster.*.name}/kube_config.yaml ~/.kube/config
+mkdir -p ~/.kube && cp result=$cluster_name/kube_config.yaml ~/.kube/config
 
 # update aws-node for private certificate for aws-api-proxy
 kubectl apply -f ./config/ds-aws-node.yaml
 
 # apply EKS authentication files
-kubectl apply -f result=${aws_eks_cluster.cluster.*.name}/aws_auth.yaml
+kubectl apply -f result=$cluster_name/aws_auth.yaml
 ##################################################################################
 EOF
 

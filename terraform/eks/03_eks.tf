@@ -2,14 +2,14 @@ terraform {
   required_version = ">= 0.12"
 }
 
-module "eks" {
-  source = "./module"
+module "eks_q" {
+  source = "../module"
 
-  vpc_id = local.vpc_id_prd
-  subnet_ids = local.subnet_ids_prd
+  vpc_id = local.vpc_id
+  subnet_ids = local.subnet_ids
 
   cluster_version = local.cluster_version
-  cluster_name = local.cluster_name_prd
+  cluster_name = local.cluster_name
   cluster_endpoint_private_access = local.cluster_private_access == true
   cluster_endpoint_public_access = local.cluster_private_access == false
   cluster_enabled_log_types = local.cluster_enabled_log_types

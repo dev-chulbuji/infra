@@ -2,11 +2,9 @@ locals {
   vpc_id = ""
 
   subnet_ids = [
-    ""
-    ""
   ]
 
-  cluster_name = "eks-dj"
+  cluster_name = "eks-prd"
 
   cluster_version = "1.13"
   cluster_private_access = true

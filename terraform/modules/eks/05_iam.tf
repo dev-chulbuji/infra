@@ -1,6 +1,6 @@
 # cluster iam role
 resource "aws_iam_role" "cluster" {
-  name = "wap-lab-role-${local.lower_name}"
+  name = "wap-eks-${local.lower_name}-role"
 
   assume_role_policy = <<POLICY
 {
@@ -31,7 +31,7 @@ resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSServicePolicy" {
 
 # worker iam role
 resource "aws_iam_role" "worker" {
-  name = "wap-lab-role-${local.lower_name}-worker"
+  name = "wap-eks-${local.lower_name}-worker-role"
 
   assume_role_policy = <<POLICY
 {
@@ -51,7 +51,7 @@ POLICY
 }
 
 resource "aws_iam_instance_profile" "worker" {
-  name = "wap-lab-profile-${local.lower_name}-worker"
+  name = "wap-eks-${local.lower_name}-worker-profile"
   role = aws_iam_role.worker.name
 }
 

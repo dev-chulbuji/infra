@@ -40,7 +40,6 @@ resource "aws_security_group_rule" "workers_ingress_cluster" {
   to_port                  = 65535
   type                     = "ingress"
 }
-
 resource "aws_security_group_rule" "workers_ingress_cluster_kubelet" {
   description              = "Allow workers Kubelets to receive communication from the cluster control plane."
   protocol                 = "tcp"
