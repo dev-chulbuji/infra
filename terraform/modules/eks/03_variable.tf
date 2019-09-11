@@ -47,6 +47,11 @@ variable "cluster_log_kms_key_id" {
   type        = string
 }
 
+variable "worker_instance_ami" {
+  description = "worker node instance ami"
+  default     = ""
+}
+
 variable "worker_instance_type" {
   description = "worker node instance type"
   default     = "t2.micro"

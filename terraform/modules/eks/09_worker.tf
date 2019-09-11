@@ -1,7 +1,7 @@
 # eks worker
 resource "aws_launch_configuration" "worker" {
   name                 = "wap_lab_launch_configuration_${local.lower_name}"
-  image_id             = data.aws_ami.eks_worker.id
+  image_id             = var.worker_instance_ami
   instance_type        = var.worker_instance_type
   iam_instance_profile = aws_iam_instance_profile.worker.name
   user_data_base64     = base64encode(data.template_file.userdata.rendered)
