@@ -31,24 +31,24 @@ resource "aws_network_acl" "private" {
 resource "aws_subnet" "private" {
   count = "${length(var.private_subnet_ips)}"
 
-  vpc_id            = "${aws_vpc.this.id}"
-  cidr_block        = "${var.private_subnet_ips[count.index]}"
-  availability_zone = "${var.azs[count.index]}"
+  vpc_id                  = "${aws_vpc.this.id}"
+  cidr_block              = "${var.private_subnet_ips[count.index]}"
+  availability_zone       = "${var.azs[count.index]}"
   map_public_ip_on_launch = false
 
   tags = "${merge(
-            var.tags,
-            map("Name", format("%s-private-%s", var.name, var.azs[count.index])),
-            map("kubernetes.io/role/internal-elb", "1"),
-            map("Tier", "private"),
-            map("TierWithAZ", format("private-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
+    var.tags,
+    map("Name", format("%s-private-%s", var.name, var.azs[count.index])),
+    map("kubernetes.io/role/internal-elb", "1"),
+    map("Tier", "private"),
+  map("TierWithAZ", format("private-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
 }
 
 # EIP for NAT gateway
 resource "aws_eip" "nat" {
   count = "${length(var.azs)}"
-  vpc = true
-  tags = "${merge(map("Name", format("%s-%s", var.name, element(var.azs, count.index))), var.tags)}"
+  vpc   = true
+  tags  = "${merge(map("Name", format("%s-%s", var.name, element(var.azs, count.index))), var.tags)}"
 }
 
 # NAT gateway

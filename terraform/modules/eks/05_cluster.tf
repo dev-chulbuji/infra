@@ -7,7 +7,7 @@ resource "aws_eks_cluster" "cluster" {
   enabled_cluster_log_types = var.cluster_enabled_log_types
 
   vpc_config {
-    subnet_ids = var.subnet_ids
+    subnet_ids         = var.subnet_ids
     security_group_ids = [aws_security_group.cluster.id]
 
     endpoint_private_access = var.cluster_endpoint_private_access
@@ -19,5 +19,12 @@ resource "aws_eks_cluster" "cluster" {
     aws_iam_role_policy_attachment.cluster-AmazonEKSServicePolicy,
     aws_cloudwatch_log_group.this
   ]
+
+  tags = merge(
+    {
+      "Name" = local.lower_name
+    },
+    local.tags,
+  )
 }
 

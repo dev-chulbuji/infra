@@ -27,7 +27,7 @@ data "aws_ami" "amazon_linux_nat" {
 // ubuntu 18.04
 data "aws_ami" "ubuntu-18_04" {
   most_recent = true
-  owners = ["099720109477"]
+  owners      = ["099720109477"]
 
   filter {
     name   = "name"
@@ -45,6 +45,6 @@ variable "office_cidr_blocks" {
 }
 
 variable "key_pair" {
-  type = "string"
+  type  = "string"
   value = "dev_chulbuji_test"
 }

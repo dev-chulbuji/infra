@@ -7,27 +7,27 @@ variable "name" {
 variable "engine" {
   description = "db engine"
   type        = "string"
-  default     = "postgres" 
+  default     = "postgres"
 }
 
 variable "engine_version" {
   description = "db engine version"
   type        = "string"
-  default     = "10.4" 
+  default     = "10.4"
 }
 
 variable "db_instance_type" {
   description = "db instance type"
   type        = "string"
-  default     = "db.t2.micro" 
+  default     = "db.t2.micro"
 }
 
 variable "username" {
-  type        = "string"
+  type = "string"
 }
 
 variable "password" {
-  type        = "string"
+  type = "string"
 }
 
 variable "ingress_sg_from_bastion" {

@@ -1,14 +1,8 @@
 # worker security group
 resource "aws_security_group" "workers" {
-  name   = "wap-lab-sg-${local.lower_name}-worker"
+  name   = "${local.lower_name}-worker"
   vpc_id = var.vpc_id
-    tags = merge(
-      var.common_tags,
-      {
-        "Name" = "wap-lab-sg-${local.lower_name}-worker"
-        "kubernetes.io/cluster/${local.lower_name}" = "owned"
-      },
-    )
+  tags   = local.tags
 }
 
 resource "aws_security_group_rule" "workers_egress_internet" {
@@ -40,23 +34,3 @@ resource "aws_security_group_rule" "workers_ingress_cluster" {
   to_port                  = 65535
   type                     = "ingress"
 }
-resource "aws_security_group_rule" "workers_ingress_cluster_kubelet" {
-  description              = "Allow workers Kubelets to receive communication from the cluster control plane."
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.workers.id
-  source_security_group_id = aws_security_group.cluster.id
-  from_port                = 10250
-  to_port                  = 10250
-  type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "workers_ingress_cluster_https" {
-  description              = "Allow pods running extension API servers on port 443 to receive communication from cluster control plane."
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.workers.id
-  source_security_group_id = aws_security_group.cluster.id
-  from_port                = 443
-  to_port                  = 443
-  type                     = "ingress"
-}
-

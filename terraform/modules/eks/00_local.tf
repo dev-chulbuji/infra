@@ -3,6 +3,17 @@
 locals {
   upper_name = upper(var.cluster_name)
   lower_name = lower(var.cluster_name)
+  account_id = data.aws_caller_identity.current.account_id
+}
+
+locals {
+  tags = merge(
+    {
+      "KubernetesCluster"                         = local.lower_name
+      "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+    },
+    var.common_tags,
+  )
 }
 
 locals {
@@ -56,6 +67,5 @@ kubectl apply -f ./config/ds-aws-node.yaml
 kubectl apply -f result=$cluster_name/aws_auth.yaml
 ##################################################################################
 EOF
-
 }
 

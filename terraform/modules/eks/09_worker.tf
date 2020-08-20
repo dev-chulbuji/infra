@@ -1,12 +1,12 @@
 # eks worker
 resource "aws_launch_configuration" "worker" {
-  name                 = "wap_lab_launch_configuration_${local.lower_name}"
+  name                 = "${local.lower_name}-launch-configuration"
   image_id             = var.worker_instance_ami
   instance_type        = var.worker_instance_type
   iam_instance_profile = aws_iam_instance_profile.worker.name
   user_data_base64     = base64encode(data.template_file.userdata.rendered)
 
-  key_name = var.worker_key_pair_name
+  key_name        = var.worker_key_pair_name
   security_groups = [aws_security_group.workers.id]
 
   root_block_device {
@@ -34,9 +34,9 @@ resource "aws_autoscaling_group" "worker" {
   tags = concat(
     [
       {
-        "key"                 = "asg:lifecycle"
-        "value"               = "normal"
-        "propagate_at_launch" = true
+        key                 = "asg:lifecycle"
+        value               = "normal"
+        propagate_at_launch = true
       },
     ],
     local.worker_tags

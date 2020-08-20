@@ -1,6 +1,6 @@
 variable "common_tags" {
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }
 
 variable "vpc_id" {
@@ -49,7 +49,6 @@ variable "cluster_log_kms_key_id" {
 
 variable "worker_instance_ami" {
   description = "worker node instance ami"
-  default     = ""
 }
 
 variable "worker_instance_type" {

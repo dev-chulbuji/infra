@@ -1,26 +1,27 @@
-terraform {
-  required_version = ">= 0.12"
-}
+//terraform {
+//  required_version = ">= 0.12"
+//}
+//
+//provider "aws" {
+//  version = ">= 2.15"
+//  region  = "ap-northeast-2"
+//}
+//
+//provider "local" {
+//  version = ">= 1.3.0"
+//}
 
-provider "aws" {
-  version = ">= 2.15"
-  region  = "ap-northeast-2"
-}
+data "aws_caller_identity" "current" {}
 
-provider "local" {
-  version = ">= 1.3.0"
-}
+data "aws_availability_zones" "azs" {}
 
 data "aws_ami" "eks_worker" {
   filter {
     name   = "name"
     values = ["amazon-eks-node-${var.cluster_version}-v*"]
   }
-
   most_recent = true
-
-  # Owner ID of AWS EKS team
-  owners = ["602401143452"]
+  owners      = ["602401143452"] # Amazon Account ID
 }
 
 data "template_file" "kube_config" {
@@ -40,9 +41,6 @@ data "template_file" "kube_config_secret" {
     CLUSTER_NAME = local.lower_name
     ENCODED_TEXT = base64encode(data.template_file.kube_config.rendered)
   }
-}
-
-data "aws_caller_identity" "current" {
 }
 
 data "template_file" "map_roles" {
@@ -85,9 +83,9 @@ data "template_file" "userdata" {
   template = file("${path.module}/templates/userdata.sh.tpl")
 
   vars = {
-    certificate = data.template_file.certificate.rendered
-    cluster_name = aws_eks_cluster.cluster.name
-    endpoint = aws_eks_cluster.cluster.endpoint
+    certificate         = data.template_file.certificate.rendered
+    cluster_name        = aws_eks_cluster.cluster.name
+    endpoint            = aws_eks_cluster.cluster.endpoint
     cluster_auth_base64 = aws_eks_cluster.cluster.certificate_authority[0].data
   }
 }

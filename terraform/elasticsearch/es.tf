@@ -6,15 +6,15 @@ provider "aws" {
 }
 
 module "es" {
-  source = "../modules/elasticsearch"
-  vpc_name = "chulbuji"
+  source      = "../modules/elasticsearch"
+  vpc_name    = "chulbuji"
   domain_name = "chulbuji-dev"
 
-  instance_count = 1
-  instance_type = "t2.small.elasticsearch"
+  instance_count        = 1
+  instance_type         = "t2.small.elasticsearch"
   dedicated_master_type = "t2.small.elasticsearch"
-  es_zone_awareness = false
-  ebs_volume_size = 10
+  es_zone_awareness     = false
+  ebs_volume_size       = 10
 
   log_publishing_options = [
     //    {

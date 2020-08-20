@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "es_management_access" {
       type = "AWS"
 
       identifiers = [
-        "${distinct(compact(var.management_iam_roles))}"]
+      "${distinct(compact(var.management_iam_roles))}"]
     }
   }
 }

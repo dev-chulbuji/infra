@@ -39,17 +39,17 @@ resource "aws_network_acl" "public" {
 resource "aws_subnet" "public" {
   count = "${length(var.public_subnet_ips)}"
 
-  vpc_id            = "${aws_vpc.this.id}"
-  cidr_block        = "${var.public_subnet_ips[count.index]}"
-  availability_zone = "${var.azs[count.index]}"
+  vpc_id                  = "${aws_vpc.this.id}"
+  cidr_block              = "${var.public_subnet_ips[count.index]}"
+  availability_zone       = "${var.azs[count.index]}"
   map_public_ip_on_launch = true
 
   tags = "${merge(
-              var.tags,
-              map("Name", format("%s-public-%s", var.name, var.azs[count.index])),
-              map("kubernetes.io/role/elb", "1"),
-              map("Tier", "public"),
-              map("TierWithAZ", format("public-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
+    var.tags,
+    map("Name", format("%s-public-%s", var.name, var.azs[count.index])),
+    map("kubernetes.io/role/elb", "1"),
+    map("Tier", "public"),
+  map("TierWithAZ", format("public-%s", substr(element(split("-", var.azs[count.index]), 2), 1, 1))))}"
 }
 
 # public route table

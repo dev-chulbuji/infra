@@ -1,6 +1,6 @@
 # cluster security group
 resource "aws_security_group" "cluster" {
-  name   = "wap-lab-sg-${local.lower_name}-cluster"
+  name   = "${local.lower_name}-cluster"
   vpc_id = var.vpc_id
 
   egress {
@@ -10,10 +10,12 @@ resource "aws_security_group" "cluster" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    "Name"                                      = "wap-lab-sg-${local.lower_name}-cluster"
-    "kubernetes.io/cluster/${local.lower_name}" = "owned"
-  }
+  tags = merge(
+    {
+      "Name" = "${local.lower_name}-cluster"
+    },
+    local.tags,
+  )
 }
 
 resource "aws_security_group_rule" "cluster-ingress-node-https" {
