@@ -3,7 +3,7 @@ terraform {
 }
 
 module "eks_q" {
-  source = "../module"
+  source = "../modules/eks"
 
   vpc_id = local.vpc_id
   subnet_ids = local.subnet_ids
@@ -18,6 +18,7 @@ module "eks_q" {
 
   worker_instance_type = local.worker_instance_type
   worker_key_pair_name = local.worker_key_pair_name
+  worker_instance_ami = local.worker_instance_ami
 
   worker_ebs_volume_type = local.worker_ebs_volume_type
   worker_ebs_volume_size = local.worker_ebs_volume_size
@@ -28,5 +29,7 @@ module "eks_q" {
   map_roles = []
   map_users = []
 
-  common_tags = {}
+  common_tags = {
+    "test" = "dj"
+  }
 }
